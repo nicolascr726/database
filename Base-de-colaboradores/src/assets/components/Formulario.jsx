@@ -3,40 +3,43 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Swal from 'sweetalert2'
 
-export const Formulario = () => {
+export const Formulario = ({colaboradores, setColaboradores, error, setError}) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [age, setAge] = useState('');
     const [position, setPosition] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [error, setError] = useState(false);
-
-    const handleSubmit = (e) => {
+    
+    const pickOnSubmit = (e) => {
         e.preventDefault();
-
         if (name.trim() === '' || email === '' || age === "" || position === "" || phoneNumber === "") {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Completa todos los campos!'
             });
-            setError(true);
-            return
         }
-        else
-            Swal.fire({
-                icon: 'success',
-                title: 'Agregado',
-                text: 'Colaborador agregado éxitosamente',
-                showConfirmButton: false,
-            })
-        setError(false);
-        return
-    };
-
+        else{
+            const nuevosColaboradores = {
+                id: Date.now(),
+                nombre: name,
+                correo: email,
+                edad: age,
+                cargo: position,
+                telefono: phoneNumber
+            }
+            setColaboradores([...colaboradores, nuevosColaboradores]);
+            setName('')
+            setEmail('')
+            setAge('')
+            setPosition('')
+            setPhoneNumber(''); 
+        }
+    }
+    console.log(pickOnSubmit)
     return (
         <Fragment>
-            <Form className='formulario' onSubmit={handleSubmit}>
+            <Form className='formulario' onSubmit={pickOnSubmit}>
                 <Form.Group className="mb-3" controlId="inputName">
                     <Form.Control type="text" placeholder="Nombre del colaborador" onChange={(e) => setName(e.target.value)} />
                 </Form.Group>
